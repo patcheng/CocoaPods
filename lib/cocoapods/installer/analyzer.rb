@@ -466,7 +466,8 @@ module Pod
 
       # Returns the sources used to query for specifications
       #
-      # When no explicit Podfile sources are defined, this defaults to all
+      # When no explicit Podfile sources are defined, this defaults to the
+      # master spec repository.
       # available sources ({SourcesManager.all}).
       #
       # @return [Array<Source>] the sources to be used in finding
@@ -476,7 +477,8 @@ module Pod
         @sources ||= begin
           sources = podfile.sources
           if sources.empty?
-            SourcesManager.all
+            url = 'https://github.com/CocoaPods/Specs.git'
+            [SourcesManager.find_or_create_source_with_url(url)]
           else
             sources.map do |url|
               SourcesManager.find_or_create_source_with_url(url)
